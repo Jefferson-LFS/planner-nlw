@@ -30,7 +30,7 @@ public class TripController {
 
         this.tripRepository.save(trip);
 
-        this.participantService.registerParticipantsToTrip(tripResquestDTO.emailsToInvite(), trip.getId());
+        this.participantService.registerParticipantsToTrip(tripResquestDTO.emailsToInvite(), trip);
 
 
         return ResponseEntity.ok(new TripCreateResponseDTO(trip.getId()));
