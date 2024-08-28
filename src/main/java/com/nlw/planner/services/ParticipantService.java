@@ -1,5 +1,7 @@
 package com.nlw.planner.services;
 
+import com.nlw.planner.api.dto.ParticipantRegisterResponseDTO;
+import com.nlw.planner.api.dto.ParticipantResponseDTO;
 import com.nlw.planner.model.participant.Participant;
 import com.nlw.planner.model.trip.Trip;
 import com.nlw.planner.repositories.ParticipantRepository;
@@ -20,8 +22,29 @@ public class ParticipantService {
 
        this.participantRepository.saveAll(participants);
 
-       System.out.println(participants.get(0).getId());
     }
 
+    public ParticipantRegisterResponseDTO registerParticipantToTrip(String email, Trip trip) {
+        Participant newParticipant = new Participant(email, trip);
+        this.participantRepository.save(newParticipant);
+
+        return new ParticipantRegisterResponseDTO(newParticipant.getId());
+    }
+
+    public List<ParticipantResponseDTO> getAllParticipantsFromTrip (UUID tripId) {
+
+        return this.participantRepository.findByTripId(tripId).stream().map(participant ->
+                        new ParticipantResponseDTO(
+                                participant.getId(),
+                                participant.getName(),
+                                participant.getEmail(),
+                                participant.getIsConfirmed()
+                        )).toList();
+    };
+
     public void triggerConfirmationEmailToParticipants(UUID tripId){};
+
+    public void triggerConfirmationEmailToParticipant(String email){};
+
+
 }

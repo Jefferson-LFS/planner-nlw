@@ -1,7 +1,7 @@
 package com.nlw.planner.api.controllers;
 
-import com.nlw.planner.api.dto.TripCreateResponseDTO;
-import com.nlw.planner.api.dto.TripResquestDTO;
+import com.nlw.planner.api.dto.*;
+import com.nlw.planner.model.participant.Participant;
 import com.nlw.planner.model.trip.Trip;
 import com.nlw.planner.repositories.TripRepository;
 import com.nlw.planner.services.ParticipantService;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,6 +35,25 @@ public class TripController {
 
 
         return ResponseEntity.ok(new TripCreateResponseDTO(trip.getId()));
+
+    }
+
+    @PostMapping("/{tripId}/invites")
+    public ResponseEntity<ParticipantRegisterResponseDTO> inviteParticipant(@PathVariable UUID tripId, @RequestBody ParticipantResquestDTO ParticipantDTO) {
+
+        Optional<Trip> trip = this.tripRepository.findById(tripId);
+
+        if(trip.isPresent()) {
+            Trip rawTrip = trip.get();
+
+            ParticipantRegisterResponseDTO participantRegisterResponseDTO =  this.participantService.registerParticipantToTrip(ParticipantDTO.email(), rawTrip);
+
+            if(rawTrip.getIsConfirmed()) this.participantService.triggerConfirmationEmailToParticipant(ParticipantDTO.email());
+
+            return ResponseEntity.ok(participantRegisterResponseDTO);
+        }
+
+        return ResponseEntity.notFound().build();
 
     }
 
@@ -79,6 +99,22 @@ public class TripController {
             participantService.triggerConfirmationEmailToParticipants(tripId);
 
             return ResponseEntity.ok(rawTrip);
+        }
+
+        return ResponseEntity.notFound().build();
+
+    }
+
+    @GetMapping("/{tripId}/participants")
+    public ResponseEntity<List<ParticipantResponseDTO>> getAllParticipants(@PathVariable UUID tripId){
+
+        Optional<Trip> trip = this.tripRepository.findById(tripId);
+
+        if(trip.isPresent()) {
+
+            List<ParticipantResponseDTO> participantList = this.participantService.getAllParticipantsFromTrip(tripId);
+
+            return ResponseEntity.ok(participantList);
         }
 
         return ResponseEntity.notFound().build();
