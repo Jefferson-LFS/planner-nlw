@@ -2,7 +2,7 @@ package com.nlw.planner.api.dto;
 
 import java.util.List;
 
-public record TripResquestDTO(
+public record TripRequestDTO(
         String destination,
         String startsAt,
         String endsAt,

@@ -1,9 +1,9 @@
 package com.nlw.planner.api.controllers;
 
 import com.nlw.planner.api.dto.*;
-import com.nlw.planner.model.participant.Participant;
 import com.nlw.planner.model.trip.Trip;
 import com.nlw.planner.repositories.TripRepository;
+import com.nlw.planner.services.ActivityService;
 import com.nlw.planner.services.ParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,26 +20,46 @@ import java.util.UUID;
 public class TripController {
 
     @Autowired
+    private TripRepository tripRepository;
+
+    @Autowired
     private ParticipantService participantService;
 
     @Autowired
-    private TripRepository tripRepository;
+    private ActivityService activityService;
 
     @PostMapping
-    public ResponseEntity<TripCreateResponseDTO> createTrip(@RequestBody TripResquestDTO tripResquestDTO) {
-        Trip trip = new Trip(tripResquestDTO);
+    public ResponseEntity<TripCreateResponseDTO> createTrip(@RequestBody TripRequestDTO tripRequestDTO) {
+        Trip trip = new Trip(tripRequestDTO);
 
         this.tripRepository.save(trip);
 
-        this.participantService.registerParticipantsToTrip(tripResquestDTO.emailsToInvite(), trip);
+        this.participantService.registerParticipantsToTrip(tripRequestDTO.emailsToInvite(), trip);
 
 
         return ResponseEntity.ok(new TripCreateResponseDTO(trip.getId()));
 
     }
 
+    @PostMapping("/{tripId}/activities")
+    public ResponseEntity<ActivityRegisterResponseDTO> registerActivity(@PathVariable UUID tripId, @RequestBody ActivityRequestDTO activityDTO) {
+
+        Optional<Trip> trip = this.tripRepository.findById(tripId);
+
+        if(trip.isPresent()) {
+            Trip rawTrip = trip.get();
+
+            ActivityRegisterResponseDTO  activityRegisterResponseDTO =  this.activityService.registerActivity(activityDTO, rawTrip);
+
+            return ResponseEntity.ok(activityRegisterResponseDTO);
+        }
+
+        return ResponseEntity.notFound().build();
+
+    }
+
     @PostMapping("/{tripId}/invites")
-    public ResponseEntity<ParticipantRegisterResponseDTO> inviteParticipant(@PathVariable UUID tripId, @RequestBody ParticipantResquestDTO ParticipantDTO) {
+    public ResponseEntity<ParticipantRegisterResponseDTO> inviteParticipant(@PathVariable UUID tripId, @RequestBody ParticipantRequestDTO ParticipantDTO) {
 
         Optional<Trip> trip = this.tripRepository.findById(tripId);
 
@@ -57,6 +77,7 @@ public class TripController {
 
     }
 
+
     @GetMapping("/{tripId}")
     public ResponseEntity<Trip> getTripDetails(@PathVariable UUID tripId) {
 
@@ -67,15 +88,15 @@ public class TripController {
     }
 
     @PutMapping("/{tripId}")
-    public ResponseEntity<Trip> updateTrip(@PathVariable UUID tripId, @RequestBody TripResquestDTO tripResquestDTO) {
+    public ResponseEntity<Trip> updateTrip(@PathVariable UUID tripId, @RequestBody TripRequestDTO tripRequestDTO) {
 
         Optional<Trip> trip = this.tripRepository.findById(tripId);
 
         if(trip.isPresent()) {
             Trip updatedTrip = trip.get();
-            updatedTrip.setEndsAt(LocalDateTime.parse(tripResquestDTO.endsAt(), DateTimeFormatter.ISO_DATE_TIME));
-            updatedTrip.setStartsAt(LocalDateTime.parse(tripResquestDTO.startsAt(), DateTimeFormatter.ISO_DATE_TIME));
-            updatedTrip.setDestination(tripResquestDTO.destination());
+            updatedTrip.setEndsAt(LocalDateTime.parse(tripRequestDTO.endsAt(), DateTimeFormatter.ISO_DATE_TIME));
+            updatedTrip.setStartsAt(LocalDateTime.parse(tripRequestDTO.startsAt(), DateTimeFormatter.ISO_DATE_TIME));
+            updatedTrip.setDestination(tripRequestDTO.destination());
 
             this.tripRepository.save(updatedTrip);
 

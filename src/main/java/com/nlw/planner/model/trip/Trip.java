@@ -1,6 +1,6 @@
 package com.nlw.planner.model.trip;
 
-import com.nlw.planner.api.dto.TripResquestDTO;
+import com.nlw.planner.api.dto.TripRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @Table(name = "trips")
 public class Trip {
 
-    public Trip(TripResquestDTO data){
+    public Trip(TripRequestDTO data){
         this.destination = data.destination();
         this.isConfirmed = false;
         this.ownerEmail = data.ownerEmail();
