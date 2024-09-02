@@ -141,4 +141,20 @@ public class TripController {
         return ResponseEntity.notFound().build();
 
     }
+
+    @GetMapping("/{tripId}/activities")
+    public ResponseEntity<List<ActivityResponseDTO>> getAllActivities(@PathVariable UUID tripId){
+
+        Optional<Trip> trip = this.tripRepository.findById(tripId);
+
+        if(trip.isPresent()) {
+
+            List<ActivityResponseDTO> activityList = this.activityService.getAllActivitiesFromTrip(tripId);
+
+            return ResponseEntity.ok(activityList);
+        }
+
+        return ResponseEntity.notFound().build();
+
+    }
 }

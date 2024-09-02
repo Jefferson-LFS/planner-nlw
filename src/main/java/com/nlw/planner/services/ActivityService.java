@@ -2,11 +2,15 @@ package com.nlw.planner.services;
 
 import com.nlw.planner.api.dto.ActivityRegisterResponseDTO;
 import com.nlw.planner.api.dto.ActivityRequestDTO;
+import com.nlw.planner.api.dto.ActivityResponseDTO;
 import com.nlw.planner.model.activities.Activity;
 import com.nlw.planner.model.trip.Trip;
 import com.nlw.planner.repositories.ActivityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ActivityService {
@@ -26,16 +30,15 @@ public class ActivityService {
 
 
 
-//    public List<ParticipantResponseDTO> getAllParticipantsFromTrip (UUID tripId) {
-//
-//        return this.participantRepository.findByTripId(tripId).stream().map(participant ->
-//                        new ParticipantResponseDTO(
-//                                participant.getId(),
-//                                participant.getName(),
-//                                participant.getEmail(),
-//                                participant.getIsConfirmed()
-//                        )).toList();
-//    };
+    public List<ActivityResponseDTO> getAllActivitiesFromTrip (UUID tripId) {
+
+        return this.activityRepository.findByTripId(tripId).stream().map(activity ->
+                        new ActivityResponseDTO(
+                                activity.getId(),
+                                activity.getTitle(),
+                                activity.getOccursAt()
+                        )).toList();
+    };
 
 
 
