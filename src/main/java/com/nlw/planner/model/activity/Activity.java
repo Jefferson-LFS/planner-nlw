@@ -1,4 +1,4 @@
-package com.nlw.planner.model.activities;
+package com.nlw.planner.model.activity;
 
 
 import com.nlw.planner.model.trip.Trip;

@@ -3,7 +3,7 @@ package com.nlw.planner.services;
 import com.nlw.planner.api.dto.ActivityRegisterResponseDTO;
 import com.nlw.planner.api.dto.ActivityRequestDTO;
 import com.nlw.planner.api.dto.ActivityResponseDTO;
-import com.nlw.planner.model.activities.Activity;
+import com.nlw.planner.model.activity.Activity;
 import com.nlw.planner.model.trip.Trip;
 import com.nlw.planner.repositories.ActivityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
