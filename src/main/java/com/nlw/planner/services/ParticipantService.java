@@ -5,7 +5,6 @@ import com.nlw.planner.api.dto.ParticipantResponseDTO;
 import com.nlw.planner.model.participant.Participant;
 import com.nlw.planner.model.trip.Trip;
 import com.nlw.planner.repositories.ParticipantRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +13,11 @@ import java.util.UUID;
 @Service
 public class ParticipantService {
 
-    @Autowired
-    private ParticipantRepository participantRepository;
+    private final ParticipantRepository participantRepository;
+
+    public ParticipantService(ParticipantRepository participantRepository) {
+        this.participantRepository = participantRepository;
+    }
 
     public void registerParticipantsToTrip(List<String> participantsToInvite, Trip trip) {
        List<Participant> participants =  participantsToInvite.stream().map(email -> new Participant(email, trip)).toList();
@@ -40,11 +42,11 @@ public class ParticipantService {
                                 participant.getEmail(),
                                 participant.getIsConfirmed()
                         )).toList();
-    };
+    }
 
-    public void triggerConfirmationEmailToParticipants(UUID tripId){};
+    public void triggerConfirmationEmailToParticipants(UUID tripId){}
 
-    public void triggerConfirmationEmailToParticipant(String email){};
+    public void triggerConfirmationEmailToParticipant(String email){}
 
 
 }

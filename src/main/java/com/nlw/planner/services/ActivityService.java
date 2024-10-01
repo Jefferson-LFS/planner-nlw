@@ -6,7 +6,6 @@ import com.nlw.planner.api.dto.ActivityResponseDTO;
 import com.nlw.planner.model.activity.Activity;
 import com.nlw.planner.model.trip.Trip;
 import com.nlw.planner.repositories.ActivityRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +14,11 @@ import java.util.UUID;
 @Service
 public class ActivityService {
 
-    @Autowired
-    private ActivityRepository activityRepository;
+    private final ActivityRepository activityRepository;
+
+    public ActivityService(ActivityRepository activityRepository) {
+        this.activityRepository = activityRepository;
+    }
 
     public ActivityRegisterResponseDTO registerActivity(ActivityRequestDTO activityRequestDTO, Trip trip) {
 
@@ -25,9 +27,7 @@ public class ActivityService {
         this.activityRepository.save(newActivity);
 
         return new ActivityRegisterResponseDTO(newActivity.getId());
-
     }
-
 
 
     public List<ActivityResponseDTO> getAllActivitiesFromTrip (UUID tripId) {
@@ -38,9 +38,6 @@ public class ActivityService {
                                 activity.getTitle(),
                                 activity.getOccursAt()
                         )).toList();
-    };
-
-
-
+    }
 
 }
