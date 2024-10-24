@@ -1,6 +1,6 @@
 package com.nlw.planner.model.trip;
 
-import com.nlw.planner.api.dto.TripRequestDTO;
+import com.nlw.planner.api.dto.trip.TripRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package com.nlw.planner.api.dto;
+package com.nlw.planner.api.dto.trip;
 
 import com.nlw.planner.model.trip.Trip;
 import lombok.Getter;

@@ -1,6 +1,17 @@
 package com.nlw.planner.api.controllers;
 
-import com.nlw.planner.api.dto.*;
+import com.nlw.planner.api.dto.activity.ActivityRegisterResponseDTO;
+import com.nlw.planner.api.dto.activity.ActivityRequestDTO;
+import com.nlw.planner.api.dto.activity.ActivityResponseDTO;
+import com.nlw.planner.api.dto.link.LinkRegisterResponseDTO;
+import com.nlw.planner.api.dto.link.LinkRequestDTO;
+import com.nlw.planner.api.dto.link.LinkResponseDTO;
+import com.nlw.planner.api.dto.participant.ParticipantRegisterResponseDTO;
+import com.nlw.planner.api.dto.participant.ParticipantRequestDTO;
+import com.nlw.planner.api.dto.participant.ParticipantResponseDTO;
+import com.nlw.planner.api.dto.trip.TripCreateResponseDTO;
+import com.nlw.planner.api.dto.trip.TripRequestDTO;
+import com.nlw.planner.api.dto.trip.TripResponseDTO;
 import com.nlw.planner.services.TripService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

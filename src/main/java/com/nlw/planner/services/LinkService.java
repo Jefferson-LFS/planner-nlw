@@ -1,8 +1,8 @@
 package com.nlw.planner.services;
 
-import com.nlw.planner.api.dto.LinkRegisterResponseDTO;
-import com.nlw.planner.api.dto.LinkRequestDTO;
-import com.nlw.planner.api.dto.LinkResponseDTO;
+import com.nlw.planner.api.dto.link.LinkRegisterResponseDTO;
+import com.nlw.planner.api.dto.link.LinkRequestDTO;
+import com.nlw.planner.api.dto.link.LinkResponseDTO;
 import com.nlw.planner.model.link.Link;
 import com.nlw.planner.model.trip.Trip;
 import com.nlw.planner.repositories.LinkRepository;

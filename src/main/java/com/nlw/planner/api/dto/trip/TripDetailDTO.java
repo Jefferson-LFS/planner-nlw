@@ -1,8 +1,7 @@
-package com.nlw.planner.api.dto;
+package com.nlw.planner.api.dto.trip;
 
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 public record TripDetailDTO(

@@ -1,7 +1,19 @@
 package com.nlw.planner.services;
 
-import com.nlw.planner.api.dto.*;
+import com.nlw.planner.api.dto.activity.ActivityRegisterResponseDTO;
+import com.nlw.planner.api.dto.activity.ActivityRequestDTO;
+import com.nlw.planner.api.dto.activity.ActivityResponseDTO;
+import com.nlw.planner.api.dto.link.LinkRegisterResponseDTO;
+import com.nlw.planner.api.dto.link.LinkRequestDTO;
+import com.nlw.planner.api.dto.link.LinkResponseDTO;
+import com.nlw.planner.api.dto.participant.ParticipantRegisterResponseDTO;
+import com.nlw.planner.api.dto.participant.ParticipantRequestDTO;
+import com.nlw.planner.api.dto.participant.ParticipantResponseDTO;
+import com.nlw.planner.api.dto.trip.TripCreateResponseDTO;
+import com.nlw.planner.api.dto.trip.TripRequestDTO;
+import com.nlw.planner.api.dto.trip.TripResponseDTO;
 import com.nlw.planner.model.trip.Trip;
+import com.nlw.planner.model.trip.exceptions.TripDateException;
 import com.nlw.planner.model.trip.exceptions.TripNotFoundException;
 import com.nlw.planner.repositories.TripRepository;
 import org.springframework.stereotype.Service;
@@ -36,10 +48,18 @@ public class TripService {
 
         Trip trip = new Trip(tripRequestDTO);
 
+        validateTripDates(trip);
+
         this.tripRepository.save(trip);
         this.participantService.registerParticipantsToTrip(tripRequestDTO.emailsToInvite(), trip);
 
         return new TripCreateResponseDTO(trip.getId());
+    }
+
+    private void validateTripDates(Trip trip) {
+        if (trip.getStartsAt().isAfter(trip.getEndsAt())) {
+            throw new TripDateException("The start date of the trip must be earlier than the end date.");
+        }
     }
 
     public TripResponseDTO getTripDetails(UUID tripId) {
@@ -77,7 +97,7 @@ public class TripService {
                 .orElseThrow(() -> new TripNotFoundException("Trip not found with ID: " + tripId));
     }
 
-    public ParticipantRegisterResponseDTO  inviteParticipant(UUID tripId, ParticipantRequestDTO ParticipantDTO) {
+    public ParticipantRegisterResponseDTO inviteParticipant(UUID tripId, ParticipantRequestDTO ParticipantDTO) {
 
         Trip rawTrip = this.getTripById(tripId);
 
