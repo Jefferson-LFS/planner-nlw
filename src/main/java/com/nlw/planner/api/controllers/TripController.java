@@ -66,6 +66,14 @@ public class TripController {
 
     }
 
+    @DeleteMapping("/{tripId}")
+    public ResponseEntity<Void> deleteTrip(@PathVariable UUID tripId) {
+
+        this.tripService.deleteTrip(tripId);
+        return ResponseEntity.noContent().build();
+
+    }
+
     @PostMapping("/{tripId}/invites")
     public ResponseEntity<ParticipantRegisterResponseDTO> inviteParticipant(@PathVariable UUID tripId, @RequestBody ParticipantRequestDTO ParticipantDTO) {
 

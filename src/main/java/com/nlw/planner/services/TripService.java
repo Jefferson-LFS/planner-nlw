@@ -17,6 +17,7 @@ import com.nlw.planner.model.trip.exceptions.TripDateException;
 import com.nlw.planner.model.trip.exceptions.TripNotFoundException;
 import com.nlw.planner.repositories.TripRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
@@ -90,6 +91,12 @@ public class TripService {
         participantService.triggerConfirmationEmailToParticipants(tripId);
 
         return new TripResponseDTO(rawTrip);
+    }
+
+    @Transactional
+    public void deleteTrip(UUID tripId) {
+        Trip trip = this.getTripById(tripId);
+        tripRepository.deleteById(trip.getId());
     }
 
     private Trip getTripById(UUID tripId) {
